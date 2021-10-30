@@ -122,40 +122,50 @@
 
 	
 	<!-- single course section -->
-	<section class="single-course spad pb-0">
+	<section class="single-course spad pb-0" style="padding-top: 50px;">
 		<div class="container">
+			<div class="row" style="margin: 0px;">
+					@if (!empty($course->category))
+				<div class="col-lg-12 jumbotron" style="height: 400px; background-position-x: center; background-position-y: center; background-image:url('{{url('/')}}/{{$course->image}}')">
+				</div>
+					@endif
+			</div>
 			<div class="course-meta-area">
 				<div class="row">
 					<div class="col-lg-10 offset-lg-1">
-						<h3>HTML5 & CSS For Begginers</h3>
+						<h3>{{$course->title}}</h3>
 						<div class="course-metas">
 							<div class="course-meta">
 								<div class="course-author">
-									<div class="ca-pic set-bg" data-setbg="img/authors/2.jpg"></div>
+									@if (!empty($course->instructor))
+									<div class="ca-pic set-bg" data-setbg="{{url('/')}}/{{$course->instructor->image}}"></div>
 									<h6>Teacher</h6>
-									<p>William Parker, <span>Developer</span></p>
+									<p>{{$course->instructor->name}}, <span>{{$course->instructor->designation}}</span></p>
+									@endif
 								</div>
 							</div>
 							<div class="course-meta">
 								<div class="cm-info">
 									<h6>Category</h6>
-									<p>Development</p>
+									@if (!empty($course->category))
+									<p>{{$course->category->category_name}}</p>
+									@endif
 								</div>
 							</div>
 							<div class="course-meta">
 								<div class="cm-info">
-									<h6>Students</h6>
-									<p>120 Registered Students</p>
+									<h6>Lauguage</h6>
+									<p>English</p>
 								</div>
 							</div>
 							<div class="course-meta">
 								<div class="cm-info">
-									<h6>Hours</h6>
-									<p>60 Hours</p>
+									<h6>Duration</h6>
+									<p>{{$course->duration}}</p>
 								</div>
 							</div>
 						</div>
-						<a href="#" class="site-btn price-btn">Price: $15</a>
+						<a href="#" class="site-btn price-btn">Price: {{$course->price}}</a>
 						<a href="#" class="site-btn buy-btn">Register Now</a>
 					</div>
 				</div>
@@ -172,7 +182,7 @@
 								</div>
 								<div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 									<div class="panel-body">
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+										<p>{{$course->description}}</p>
 									</div>
 								</div>
 							</div>
@@ -209,7 +219,9 @@
 								</div>
 								<div id="collapse3" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
 									<div class="panel-body">
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+										@if (!empty($course->instructor))
+										<p>{{$course->instructor->description}}</p>
+										@endif
 									</div>
 								</div>
 							</div>

@@ -162,13 +162,17 @@
 			<ul class="course-filter controls">
 				<li class="control active" data-filter="all">All</li>
 				@foreach($categories as $catogory)
-				<li class="control" data-filter="{{$catogory->slug}}">{{$catogory->category_name}}</li>
+				<li class="control" data-filter=".{{$catogory->slug}}">{{$catogory->category_name}}</li>
 				@endforeach
 			</ul>                                       
 			<div class="row course-items-area">
 				<!-- course -->
 				@foreach($courses as $course)
-				<div class="mix col-lg-3 col-md-4 col-sm-6 {{$catogory->slug}}">
+				@if (!empty($course->category))
+				<div class="mix col-lg-3 col-md-4 col-sm-6 {{$course->category->slug}}">
+				@else
+				<div class="mix col-lg-3 col-md-4 col-sm-6">
+				@endif
 					<div class="course-item">
 						<div class="course-thumb set-bg" data-setbg="{{$course->image}}">
 							<div class="price">Price: {{$course->price}}</div>
@@ -177,13 +181,15 @@
 							<div class="course-text">
 								<h5>{{$course->title}}</h5>
 								<p>{{$course->description}}</p>
-								<div class="students">20 Students</div>
+								<a class="students" href="{{ url('course') }}/{{$course->id}}">More Info</a>
 							</div>
+							@if (!empty($course->instructor))
 							<div class="course-author">
-								<div class="ca-pic set-bg" data-setbg="{{asset('frontend/img/authors/1.jpg')}}">
+								<div class="ca-pic set-bg" data-setbg="{{$course->instructor->image}}">
                             </div>
-								<p>William Parker, <span>Developer</span></p>
+								<p>{{$course->instructor->name}}, <span>{{$course->instructor->designation}}</span></p>
 							</div>
+							@endif
 						</div>
 					</div>
 				</div>

@@ -20,7 +20,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::get('/', [AdminDashbardController::class,'home']);
 Route::get('join', [AdminDashbardController::class,'join']);
-Route::get('course', [AdminDashbardController::class,'course']);
+Route::get('course/{id}', [AdminDashbardController::class,'course']);
 
 Route::get('admin-instructors-view', [AdminDashbardController::class,'instructors_view']);
 Route::get('admin-instructor-add', [AdminDashbardController::class,'instructor_view']);

@@ -146,19 +146,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-envelope"></i>
               <p>
-               Instructors
+               students
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-instructors-view') }}" class="nav-link">
+                <a href="{{ url('admin-students-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-instructor-add') }}" class="nav-link">
+                <a href="{{ url('admin-student-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -297,7 +297,75 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          
+          <div class="col-md-6">
+            <form action="{{ url('admin-student-add') }}" method="post" enctype="multipart/form-data">
+              @csrf
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="studentFName">First Name</label>
+                  <input type="name" name="first_name" class="form-control" id="studentFName" placeholder="Ex: Thomas" required>
+                </div>
+                <div class="form-group">
+                  <label for="studentLName">Last Name</label>
+                  <input type="name" name="last_name" class="form-control" id="studentLName" placeholder="Ex: Jason" required>
+                </div>
+                <div class="form-group">
+                  <label>Gender</label>
+                    <select class="form-control select2" style="width: 100%;" name="gender" required>
+                      <option selected="selected" disabled>Select Option</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="studentEmail">Email</label>
+                  <input type="name" name="email" class="form-control" id="studentEmail" placeholder="Ex: info@email.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="studentPhone">Phone</label>
+                  <input type="name" name="text" class="form-control" id="studentPhone" placeholder="Ex: +91 23224 23232" required>
+                </div>
+                <div class="form-group">
+                  <label>Qualification</label>
+                  <select class="form-control select2" style="width: 100%;" name="qualification" required>
+                    <option selected="selected" disabled>Select Option</option>
+                    <option value="Bachelor's degree">Bachelor's degree</option>
+                    <option value="Master's degree">Master's degree</option>
+                    <option value="Doctorate">Doctorate</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="studentDesignation">Designation</label>
+                  <input type="name" name="designation" class="form-control" id="studentDesignation" placeholder="Ex: Web Developer" required>
+                </div>
+                <div class="form-group">
+                  <label>Course</label>
+                    <select class="form-control select2" style="width: 100%;" name="course" required>
+                      <option selected="selected" disabled>Select Option</option>
+                      @foreach($courses as $course)
+                        <option value="{{$course->id}}">{{$course->title}}</option>
+                      @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label>Payment</label>
+                    <select class="form-control select2" style="width: 100%;" name="payment" required>
+                      <option selected="selected" disabled>Select Option</option>
+                      <option>One Time</option>
+                      <option>Installment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea class="form-control" name="address" rows="3" placeholder="About ..."></textarea>
+                </div>
+              </div>
+                <!-- /.card-body -->
+                <div class="footer" style="float: right;">
+                  <button type="submit" class="btn btn-primary" style="padding: 7px 30px;">Save</button>
+                </div>
+            </form>
+          </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

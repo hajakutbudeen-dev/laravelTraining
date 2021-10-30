@@ -330,6 +330,17 @@
                       @endforeach
                     </select>
                 </div>
+
+                <div class="form-group">
+                  <label>Instructor</label>
+                    <select class="form-control select2" style="width: 100%;" name="instructor" required>
+                      <option selected="selected" disabled>Select Option</option>
+                      @foreach($instructors as $instructor)
+                        <option value="{{$instructor->id}}">{{$instructor->name}}</option>
+                      @endforeach
+                    </select>
+                </div>
+
                 <div class="form-group">
                   <label for="courseDuration">Duration</label>
                   <input type="name" name="duration" class="form-control" id="courseDuration" placeholder="Ex: 30 Hours" required>

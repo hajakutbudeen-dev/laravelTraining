@@ -10,4 +10,9 @@ class Instructor extends Model
     use HasFactory;
 
     protected $table = 'instructors';
+
+    public function course()
+    {
+       return $this->hasOne('App\Models\Course');
+    }
 }

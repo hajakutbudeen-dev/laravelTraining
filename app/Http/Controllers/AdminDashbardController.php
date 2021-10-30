@@ -63,23 +63,24 @@ class AdminDashbardController extends Controller
     }
     public function student_view()
     {
-        return view('dashboard-stu-add');
+        $courses = Course::get();
+        return view('dashboard-stu-add', compact('courses'));
     }
     public function student_add(Request $request)
     {
         $validation = $request->validate([
             'first_name' => 'required',
+            'last_name' => 'required',
             'qualification' => 'required',
             'designation' => 'required',
-            'designation' => 'required',
-            'gender' => 'required',
-            'experience' => 'required',
             'gender' => 'required',
             'email' => 'required',
             'phone' => 'required',
+            'address' => 'required',
             'course' => 'required',
             'payment' => 'required',
         ]);
+        return $request;
         dd('saved');
     }
     // Student End
@@ -126,7 +127,8 @@ class AdminDashbardController extends Controller
     public function course_view()
     {
         $categories = Category::get();
-        return view('dashboard-cou-add', compact('categories'));
+        $instructors = Instructor::get();
+        return view('dashboard-cou-add', compact('categories', 'instructors'));
     }
     public function course_add(Request $request)
     {
@@ -139,6 +141,7 @@ class AdminDashbardController extends Controller
         $validation = $request->validate([
             'name' => 'required',
             'catogory' => 'required',
+            'instructor' => 'required',
             'duration' => 'required',
             'price' => 'required',
             'description' => 'required',
@@ -147,6 +150,7 @@ class AdminDashbardController extends Controller
         $course->title = $request->name;
         $course->image = $image;
         $course->category_id = $request->catogory;
+        $course->instructor_id = $request->instructor;
         $course->duration = $request->duration;
         $course->price = $request->price;
         $course->description = $request->description;
@@ -188,13 +192,11 @@ class AdminDashbardController extends Controller
     }
 
 
-
-
     // Fronend Start
     public function home()
     {
         $categories = Category::get();
-        $courses = Course::get();
+        $courses = Course::with('category', 'instructor')->get();
         return view('home', compact('categories', 'courses'));
     }
 
@@ -203,9 +205,10 @@ class AdminDashbardController extends Controller
         return view('join');
     }
 
-    public function course()
+    public function course($id)
     {
-        return view('join');
+        $course = Course::with('category', 'instructor')->find($id);
+        return view('course', compact('course'));
     }
     // Fronend End
 }
