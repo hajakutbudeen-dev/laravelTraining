@@ -151,7 +151,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
                Instructors
                 <i class="fas fa-angle-left right"></i>
@@ -176,19 +176,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-              Students
+              Enquiries
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -318,6 +318,10 @@
                       <input type="file" name="image" class="custom-file-input" id="customFile" onchange="getName()">
                       <label class="custom-file-label" for="customFile" id="customName">Choose file</label>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" name="description" rows="3" placeholder="About ..."></textarea>
                 </div>
                 <!-- /.card-body -->
                 <div class="footer" style="float: right;">

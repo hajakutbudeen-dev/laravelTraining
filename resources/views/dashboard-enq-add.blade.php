@@ -144,21 +144,21 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
-               students
+               Instructors
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -169,19 +169,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-              Students
+              Enquiries
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -298,16 +298,16 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-md-6">
-            <form action="{{ url('admin-student-add') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url('admin-enquiry-add') }}" method="post" enctype="multipart/form-data">
               @csrf
               <div class="card-body">
                 <div class="form-group">
-                  <label for="studentFName">First Name</label>
-                  <input type="name" name="first_name" class="form-control" id="studentFName" placeholder="Ex: Thomas" required>
+                  <label for="enquiryFName">Name</label>
+                  <input type="name" name="name" class="form-control" id="enquiryFName" placeholder="Ex: Thomas" required>
                 </div>
                 <div class="form-group">
-                  <label for="studentLName">Last Name</label>
-                  <input type="name" name="last_name" class="form-control" id="studentLName" placeholder="Ex: Jason" required>
+                  <label for="enquiryDob">Date of Birth</label>
+                  <input type="date" name="dob" class="form-control" id="enquiryDob" required>
                 </div>
                 <div class="form-group">
                   <label>Gender</label>
@@ -318,25 +318,43 @@
                     </select>
                 </div>
                 <div class="form-group">
-                  <label for="studentEmail">Email</label>
-                  <input type="name" name="email" class="form-control" id="studentEmail" placeholder="Ex: info@email.com" required>
+                  <label for="enquiryEmail">Email</label>
+                  <input type="name" name="email" class="form-control" id="enquiryEmail" placeholder="Ex: info@email.com" required>
                 </div>
                 <div class="form-group">
-                  <label for="studentPhone">Phone</label>
-                  <input type="name" name="text" class="form-control" id="studentPhone" placeholder="Ex: +91 23224 23232" required>
+                  <label for="enquiryPhone">Phone</label>
+                  <input type="name" name="phone" class="form-control" id="enquiryPhone" placeholder="Ex: +91 23224 23232" required>
+                </div>
+                <div class="form-group">
+                  <label for="enquiryPassedOut">Passed Out</label>
+                  <input type="name" name="passedout" class="form-control" id="enquiryPassedOut" placeholder="Ex: 2021" required>
                 </div>
                 <div class="form-group">
                   <label>Qualification</label>
                   <select class="form-control select2" style="width: 100%;" name="qualification" required>
                     <option selected="selected" disabled>Select Option</option>
-                    <option value="Bachelor's degree">Bachelor's degree</option>
-                    <option value="Master's degree">Master's degree</option>
-                    <option value="Doctorate">Doctorate</option>
+                    @foreach($degrees as $degree)
+                        <option value="{{$degree->id}}">{{$degree->degree_name}}</option>
+                    @endforeach
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="studentDesignation">Designation</label>
-                  <input type="name" name="designation" class="form-control" id="studentDesignation" placeholder="Ex: Web Developer" required>
+                  <label>Specialization</label>
+                  <select class="form-control select2" style="width: 100%;" name="specialization" required>
+                    <option selected="selected" disabled>Select Option</option>
+                    @foreach($specializations as $specialization)
+                        <option value="{{$specialization->id}}">{{$specialization->major_name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>College</label>
+                  <select class="form-control select2" style="width: 100%;" name="college" required>
+                    <option selected="selected" disabled>Select Option</option>
+                    @foreach($colleges as $college)
+                        <option value="{{$college->id}}">{{$college->college_name}}</option>
+                    @endforeach
+                  </select>
                 </div>
                 <div class="form-group">
                   <label>Course</label>
@@ -345,14 +363,6 @@
                       @foreach($courses as $course)
                         <option value="{{$course->id}}">{{$course->title}}</option>
                       @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                  <label>Payment</label>
-                    <select class="form-control select2" style="width: 100%;" name="payment" required>
-                      <option selected="selected" disabled>Select Option</option>
-                      <option>One Time</option>
-                      <option>Installment</option>
                     </select>
                 </div>
                 <div class="form-group">

@@ -17,6 +17,7 @@ class CreateCoursesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('category_id');
+            $table->string('technologies');
             $table->string('duration');
             $table->string('price');
             $table->string('description');

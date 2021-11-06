@@ -144,7 +144,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+            <i class="nav-icon fas fa-users"></i>
               <p>
                Instructors
                 <i class="fas fa-angle-left right"></i>
@@ -169,19 +169,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-              Students
+              Enquiries
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -300,7 +300,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Fixed Header Table</h3>
+                <h3 class="card-title">Enquiries</h3>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -319,70 +319,85 @@
                 <table class="table table-head-fixed text-nowrap">
                   <thead>
                     <tr>
+                      <th></th>
                       <th>ID</th>
-                      <th>User</th>
-                      <th>Date</th>
+                      <th>Name</th>
+                      <th>DOB</th>
+                      <th>Gender</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Address</th>
                       <th>Status</th>
-                      <th>Reason</th>
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($enquiries as $enquiry)
                     <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                        <td>
+                          <button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#addl{{$enquiry->id}}"><i class="fas fa-plus"></i> </button>
+                        </td>
+                        <td>{{$enquiry->id}}</td>
+                        <td>{{$enquiry->name}}</td>
+                        <td>{{$enquiry->dob}}</td>
+                        <td>{{$enquiry->gender}}</td>
+                        <td>{{$enquiry->email}}</td>
+                        <td>{{$enquiry->phone}}</td>
+                        <td>{{$enquiry->address}}</td>
+                        <td>
+                          <form action="{{ url('admin-enquiry-update') }}" method="post">
+                            @csrf
+                            <div style="display:-webkit-inline-box;">
+                              <input type="hidden" name="id" value="{{$enquiry->id}}">
+                              <div class="form-group">
+                                  <select class="form-control-sm select2" style="width: 100%;" name="status" required>
+                                    @if($enquiry->status=='1')
+                                    <option value="1" selected>Approved</option>
+                                    <option value="0">Pending</option>
+                                    @else
+                                    <option value="1">Approved</option>
+                                    <option value="0"selected>Pending</option>
+                                    @endif
+                                  </select>
+                              </div>
+                              &nbsp;
+                              <button type="submit" class="btn btn-success btn-sm">Update</button>
+                            </div>
+                          </form>
+                        </td>
                     </tr>
                     <tr>
-                      <td>219</td>
-                      <td>Alexander Pierce</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                      <td></td>
+                      <td></td>
+                      @if (!empty($enquiry->degree))
+                        <td>
+                          <div id="addl{{$enquiry->id}}" class="jumbotron collapse" style="margin: 0; padding: .5em 1em .5em 1em;font-family: monospace;font-size: small;">
+                            {{$enquiry->degree->degree_name}}
+                          </div>
+                         </td>
+                      @endif
+                      @if (!empty($enquiry->college))
+                        <td>
+                          <div id="addl{{$enquiry->id}}" class="jumbotron collapse" style="margin: 0; padding: .5em 1em .5em 1em;font-family: monospace;font-size: small;">
+                            {{$enquiry->college->college_name}}
+                          </div>
+                         </td>
+                      @endif
+                      @if (!empty($enquiry->specialization))
+                        <td>
+                          <div id="addl{{$enquiry->id}}" class="jumbotron collapse" style="margin: 0; padding: .5em 1em .5em 1em;font-family: monospace;font-size: small;">
+                            {{$enquiry->specialization->major_name}}
+                          </div>
+                         </td>
+                      @endif
+                      @if (!empty($enquiry->course))
+                        <td>
+                          <div id="addl{{$enquiry->id}}" class="jumbotron collapse" style="margin: 0; padding: .5em 1em .5em 1em;font-family: monospace;font-size: small;">
+                            {{$enquiry->course->title}}
+                          </div>
+                         </td>
+                      @endif
                     </tr>
-                    <tr>
-                      <td>657</td>
-                      <td>Bob Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>175</td>
-                      <td>Mike Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>134</td>
-                      <td>Jim Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>494</td>
-                      <td>Victoria Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>832</td>
-                      <td>Michael Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>982</td>
-                      <td>Rocky Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>

@@ -144,7 +144,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
                Instructors
                 <i class="fas fa-angle-left right"></i>
@@ -169,19 +169,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-              Students
+              Enquiries
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -323,6 +323,7 @@
                       <th>Image</th>
                       <th>Slug</th>
                       <th>Category Name</th>
+                      <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -332,6 +333,7 @@
                         <td><img src="{{$catogory->image}}" width="50px"/></td>
                         <td>{{$catogory->slug}}</td>
                         <td>{{$catogory->category_name}}</td>
+                        <td>{{$catogory->description}}</td>
                     </tr>
                     @endforeach
                   </tbody>

@@ -20,4 +20,13 @@ class Course extends Model
     {
        return $this->belongsTo('App\Models\Instructor');
     }
+    public function technology()
+    {
+       return $this->belongsTo('App\Models\Technology');
+    }
+
+    public function enquiry()
+    {
+       return $this->hasOne('App\Models\Enquiry');
+    }
 }

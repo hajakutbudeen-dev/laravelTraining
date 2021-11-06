@@ -126,7 +126,7 @@
                     </div>
 						<div class="ci-text">
 							<h5>{{$catogory->category_name}}</h5>
-							<p>Lorem ipsum dolor sit amet, consectetur</p>
+							<p>{{$catogory->description}}</p>
 							<span>Courses</span> 
 							<!-- C, C++, C#, VB.Net, Java, Python, Electron JS -->
 						</div>
@@ -181,7 +181,7 @@
 							<div class="course-text">
 								<h5>{{$course->title}}</h5>
 								<p>{{$course->description}}</p>
-								<a class="students" href="{{ url('course') }}/{{$course->id}}">More Info</a>
+								<a class="enquiries" href="{{ url('course') }}/{{$course->id}}">More Info</a>
 							</div>
 							@if (!empty($course->instructor))
 							<div class="course-author">

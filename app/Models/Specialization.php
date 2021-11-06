@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Technology extends Model
+class Specialization extends Model
 {
     use HasFactory;
 
-    protected $table = 'technologies';
+    protected $table = 'specializations';
 
-    public function course()
+    public function enquiry()
     {
-       return $this->hasOne('App\Models\Course');
+       return $this->hasOne('App\Models\Enquiry');
     }
 }

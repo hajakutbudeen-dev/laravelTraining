@@ -4,13 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Instructor;
-use App\Models\Student;
+use App\Models\Enquiry;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Technology;
+use App\Models\College;
+use App\Models\Degree;
+use App\Models\Specialization;
 
 class AdminDashbardController extends Controller
 {
+     // Dashboard
+     public function dashboard()
+     {
+        $enquiries = Enquiry::count();
+        $students = Enquiry::where('status', 1)->count();
+        $instructors = Instructor::count();
+        $courses = Course::count();
+        return view('dashboard', compact('enquiries', 'instructors', 'courses', 'students'));
+     }
+
     // Instructor Start
     public function instructors_view()
     {
@@ -55,35 +68,99 @@ class AdminDashbardController extends Controller
     }
     // Instructor End 
 
-    // Student Start
-    public function students_view()
+    // Enquiry Start
+    public function enquiries_view()
     {
-        $students = Student::get();
-        return view('dashboard-stu-view', compact('students'));
+        $enquiries = Enquiry::with('course', 'degree', 'college', 'specialization')->get();
+        return view('dashboard-enq-view', compact('enquiries'));
     }
-    public function student_view()
+    public function enquiry_view()
     {
         $courses = Course::get();
-        return view('dashboard-stu-add', compact('courses'));
+        $colleges = College::get();
+        $degrees = Degree::get();
+        $specializations = Specialization::get();
+        return view('dashboard-enq-add', compact('courses', 'colleges', 'degrees', 'specializations'));
     }
-    public function student_add(Request $request)
+    public function enquiry_add(Request $request)
     {
         $validation = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'qualification' => 'required',
-            'designation' => 'required',
+            'name' => 'required',
+            'dob' => 'required',
             'gender' => 'required',
             'email' => 'required',
             'phone' => 'required',
-            'address' => 'required',
+            'passedout' => 'required',
+            'qualification' => 'required',
+            'specialization' => 'required',
+            'college' => 'required',
             'course' => 'required',
-            'payment' => 'required',
+            'address' => 'required',
         ]);
-        return $request;
-        dd('saved');
+
+        $enquiry = new Enquiry;
+        $enquiry->name = $request->name;
+        $enquiry->dob = $request->dob;
+        $enquiry->gender = $request->gender;
+        $enquiry->email = $request->email;
+        $enquiry->phone = $request->phone;
+        $enquiry->passed_out = $request->passedout;
+        $enquiry->degree_id = $request->qualification;
+        $enquiry->specialization_id = $request->specialization;
+        $enquiry->college_id = $request->college;
+        $enquiry->address = $request->address;
+        $enquiry->course_id = $request->course;
+        $enquiry->status = 0;
+        $enquiry->save();
+        return redirect()->back();
     }
-    // Student End
+    public function enquiry_update(Request $request)
+    {
+        $validation = $request->validate([
+            'id' => 'required',
+            'status' => 'required',
+        ]);
+
+        $enquiry = Enquiry::find($request->id);
+        if($enquiry) {
+            $enquiry->status = $request->status;
+            $enquiry->save();
+        }
+        return redirect()->back();
+    }
+    public function guest_enquiry_add(Request $request)
+    {
+        $validation = $request->validate([
+            'name' => 'required',
+            'dob' => 'required',
+            'gender' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'passedout' => 'required',
+            'qualification' => 'required',
+            'specialization' => 'required',
+            'college' => 'required',
+            'course' => 'required',
+            'address' => 'required',
+        ]);
+        
+        $enquiry = new Enquiry;
+        $enquiry->name = $request->name;
+        $enquiry->dob = $request->dob;
+        $enquiry->gender = $request->gender;
+        $enquiry->email = $request->email;
+        $enquiry->phone = $request->phone;
+        $enquiry->passed_out = $request->passedout;
+        $enquiry->degree_id = $request->qualification;
+        $enquiry->specialization_id = $request->specialization;
+        $enquiry->college_id = $request->college;
+        $enquiry->course_id = $request->course;
+        $enquiry->address = $request->address;
+        $enquiry->status = 1;
+        $enquiry->save();
+        return redirect()->back();
+    }
+    // Enquiry End
 
 
     // Category Start
@@ -106,12 +183,14 @@ class AdminDashbardController extends Controller
         }
         $validation = $request->validate([
             'name' => 'required',
+            'description' => 'required',
         ]);
         $slug = strtolower(trim(preg_replace('/[\s-]+/', '-', preg_replace('/[^A-Za-z0-9-]+/', '-', preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $request->name))))), '-'));
         $category = new Category;
         $category->slug = $slug;
         $category->image = $image;
         $category->category_name = $request->name;
+        $category->description = $request->description;
         $category->save();
         return redirect()->back();
     }
@@ -128,7 +207,8 @@ class AdminDashbardController extends Controller
     {
         $categories = Category::get();
         $instructors = Instructor::get();
-        return view('dashboard-cou-add', compact('categories', 'instructors'));
+        $technologies = Technology::get();
+        return view('dashboard-cou-add', compact('categories', 'instructors', 'technologies'));
     }
     public function course_add(Request $request)
     {
@@ -141,6 +221,8 @@ class AdminDashbardController extends Controller
         $validation = $request->validate([
             'name' => 'required',
             'catogory' => 'required',
+            'technologies' => 'required',
+            'locale' => 'required',
             'instructor' => 'required',
             'duration' => 'required',
             'price' => 'required',
@@ -150,11 +232,24 @@ class AdminDashbardController extends Controller
         $course->title = $request->name;
         $course->image = $image;
         $course->category_id = $request->catogory;
+        $course->technologies = json_encode($request->technologies); //convert array to string
+        $course->locale = json_encode($request->locale); //convert array to string
         $course->instructor_id = $request->instructor;
         $course->duration = $request->duration;
         $course->price = $request->price;
         $course->description = $request->description;
         $course->save();
+
+        // $course_id = $course->id;
+        // $arr = explode(",", $request->topic);
+
+        // $topic = new Topic;
+        // for ($i = 0; $i < count($arr); $i++) {
+        //     $topic->course_id = $course_id;
+        //     $topic->topic_name = $arr[$i];
+        //     $topic->save();
+        // }
+
         return redirect()->back();
     }
     // Course End
@@ -175,11 +270,9 @@ class AdminDashbardController extends Controller
     {
         $validation = $request->validate([
             'name' => 'required',
-            'catogory' => 'required',
         ]);
         $technology = new Technology;
         $technology->technology_name = $request->name;
-        $technology->category_id = $request->catogory;
         $technology->save();
         return redirect()->back();
     }
@@ -208,7 +301,11 @@ class AdminDashbardController extends Controller
     public function course($id)
     {
         $course = Course::with('category', 'instructor')->find($id);
-        return view('course', compact('course'));
+        $courses = Course::get();
+        $colleges = College::get();
+        $degrees = Degree::get();
+        $specializations = Specialization::get();
+        return view('course', compact('course', 'courses', 'colleges', 'degrees', 'specializations'));
+        // Fronend End
     }
-    // Fronend End
 }

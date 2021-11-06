@@ -144,7 +144,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
                Instructors
                 <i class="fas fa-angle-left right"></i>
@@ -169,19 +169,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-              Students
+              Enquiries
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url('admin-students-view') }}" class="nav-link">
+                <a href="{{ url('admin-enquiries-view') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin-student-add') }}" class="nav-link">
+                <a href="{{ url('admin-enquiry-add') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
@@ -304,16 +304,6 @@
                 <div class="form-group">
                   <label for="technologyName">Technology Name</label>
                   <input type="name" name="name" class="form-control" id="technologyName" placeholder="Ex: Java" required>
-                </div>
-                <div class="form-group">
-                  <label>Category</label>
-                    <select class="form-control select2" style="width: 100%;" name="catogory" required>
-                      <option selected="selected" disabled>Select Option</option>
-                      @foreach($categories as $catogory)
-                        <option value="{{$catogory->id}}">{{$catogory->category_name}}</option>
-                      @endforeach
-                    </select>
-                  </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="footer" style="float: right;margin-right: 25px;">
