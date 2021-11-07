@@ -11,18 +11,20 @@ use App\Models\Technology;
 use App\Models\College;
 use App\Models\Degree;
 use App\Models\Specialization;
+use App\Models\Payment;
 
 class AdminDashbardController extends Controller
 {
-     // Dashboard
-     public function dashboard()
-     {
+    // Dashboard start
+    public function dashboard() {
         $enquiries = Enquiry::count();
-        $students = Enquiry::where('status', 1)->count();
+        $students = Payment::count();
         $instructors = Instructor::count();
         $courses = Course::count();
         return view('dashboard', compact('enquiries', 'instructors', 'courses', 'students'));
-     }
+    }
+    // Dashboard end
+
 
     // Instructor Start
     public function instructors_view()
@@ -68,6 +70,7 @@ class AdminDashbardController extends Controller
     }
     // Instructor End 
 
+    
     // Enquiry Start
     public function enquiries_view()
     {
@@ -95,6 +98,7 @@ class AdminDashbardController extends Controller
             'specialization' => 'required',
             'college' => 'required',
             'course' => 'required',
+            'payment' => 'required',
             'address' => 'required',
         ]);
 
@@ -110,22 +114,9 @@ class AdminDashbardController extends Controller
         $enquiry->college_id = $request->college;
         $enquiry->address = $request->address;
         $enquiry->course_id = $request->course;
+        $enquiry->payment_type = $request->payment;
         $enquiry->status = 0;
         $enquiry->save();
-        return redirect()->back();
-    }
-    public function enquiry_update(Request $request)
-    {
-        $validation = $request->validate([
-            'id' => 'required',
-            'status' => 'required',
-        ]);
-
-        $enquiry = Enquiry::find($request->id);
-        if($enquiry) {
-            $enquiry->status = $request->status;
-            $enquiry->save();
-        }
         return redirect()->back();
     }
     public function guest_enquiry_add(Request $request)
@@ -141,6 +132,7 @@ class AdminDashbardController extends Controller
             'specialization' => 'required',
             'college' => 'required',
             'course' => 'required',
+            'payment' => 'required',
             'address' => 'required',
         ]);
         
@@ -154,9 +146,10 @@ class AdminDashbardController extends Controller
         $enquiry->degree_id = $request->qualification;
         $enquiry->specialization_id = $request->specialization;
         $enquiry->college_id = $request->college;
-        $enquiry->course_id = $request->course;
         $enquiry->address = $request->address;
-        $enquiry->status = 1;
+        $enquiry->course_id = $request->course;
+        $enquiry->payment_type = $request->payment;
+        $enquiry->status = 0;
         $enquiry->save();
         return redirect()->back();
     }
@@ -279,12 +272,120 @@ class AdminDashbardController extends Controller
     // Technology End
 
 
+    // Payment Start
+     public function payments_view()
+     {
+        $payments = Payment::get();
+        return view('dashboard-pay-view', compact('payments'));
+     }
+     public function payment_view()
+     {
+        $enquiries = Enquiry::get();
+        return view('dashboard-pay-add', compact('enquiries'));
+     }
+     public function payment_add(Request $request)
+     {
+         $validation = $request->validate([
+             'enquiry_no' => 'required',
+             'course_no' => 'required',
+             'course_fee' => 'required',
+             'payment_type' => 'required',
+             'invoice_no' => 'required',
+             'reference_no' => 'required',
+             'paid' => 'required',
+             'payment_method' => 'required',
+         ]);
+         $fee = preg_replace('/[^0-9.]/','',$request->course_fee);
+         $paid = preg_replace('/[^0-9.]/','',$request->paid);
+         $balance = $fee - $paid;
+
+         if($request->payment_type == 'full'){
+            if($balance == 0){
+                $payment = new Payment;
+                $payment->enquiry_id = $request->enquiry_no;
+                $payment->course_id = $request->course_no;
+                $payment->full_invoice_no = $request->invoice_no;
+                $payment->full_reference_no = $request->reference_no;
+                $payment->payment_type = $request->payment_type;
+                $payment->full_payment = $request->paid;
+                $payment->full_method = $request->payment_method;
+                $payment->balance = $balance;
+                $payment->status = 1;
+                $payment->save();
+                $payment_id = $payment->id;
+
+                $enquiry = Enquiry::find($request->enquiry_no);
+                if($enquiry) {
+                    $enquiry->payment_id = $payment_id;
+                    $enquiry->status = 1;
+                    $enquiry->save();
+                }
+                return redirect()->back();
+            } else {
+                dd('Please enter full course amount!');
+            }
+         } else {
+            if($request->payment_no == null){
+                $payment = new Payment;
+                $payment->enquiry_id = $request->enquiry_no;
+                $payment->course_id = $request->course_no;
+                $payment->emi_first_invoice_no = $request->invoice_no;
+                $payment->emi_first_reference_no = $request->reference_no;
+                $payment->payment_type = $request->payment_type;
+                $payment->emi_first_payment = $request->paid;
+                $payment->emi_first_method = $request->payment_method;
+                $payment->balance = $balance;
+                $payment->status = 0;
+                $payment->save();
+                $payment_id = $payment->id;
+
+                $enquiry = Enquiry::find($request->enquiry_no);
+                if($enquiry) {
+                    $enquiry->payment_id = $payment_id;
+                    $enquiry->status = 0;
+                    $enquiry->save();
+                }
+                return redirect()->back();
+            } else {
+                $payment = Payment::find($request->payment_no);
+                $fee = preg_replace('/[^0-9.]/','',$request->course_fee_balance);
+                $balance = $fee - $paid;
+                if($payment) {
+                    $payment->emi_second_invoice_no = $request->invoice_no;
+                    $payment->emi_second_reference_no = $request->reference_no;
+                    $payment->emi_second_payment = $request->paid;
+                    $payment->emi_second_method = $request->payment_method;
+                    $payment->balance = $balance;
+                    $payment->status = 1;
+                    $payment->save();
+                }
+
+                $enquiry = Enquiry::find($request->enquiry_no);
+                if($enquiry) {
+                    $enquiry->status = 1;
+                    $enquiry->save();
+                }
+                return redirect()->back();
+            }
+         }
+     }
+     public function payment_enquiry(Request $request)
+     {
+        $validation = $request->validate([
+            'id' => 'required',
+        ]);
+        $enquiry = Enquiry::with('course','payment')->find($request->id);
+        return $enquiry;
+    }
+     // Payment End
+
+
     public function settings()
     {
        //
     }
 
-
+    
     // Fronend Start
     public function home()
     {
@@ -308,4 +409,5 @@ class AdminDashbardController extends Controller
         return view('course', compact('course', 'courses', 'colleges', 'degrees', 'specializations'));
         // Fronend End
     }
+    // Fronend End
 }

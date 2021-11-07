@@ -28,13 +28,6 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('backend/plugins/summernote/summernote-bs4.min.css')}}">
   
-  <script>
-    function getName () {
-      var name = document.getElementById('customFile'); 
-      document.getElementById('customName').innerHTML = name.files.item(0).name;
-    };
-  </script>
-  
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -142,7 +135,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-          <a href="{{ url('dashboard') }}" class="nav-link">
+           <a href="{{ url('dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -326,31 +319,53 @@
      <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
+        
         <div class="row">
-        <div class="col-md-6">
-            <form action="{{ url('admin-category-add') }}" method="post" enctype="multipart/form-data">
-              @csrf
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="categoryName">Category Name</label>
-                  <input type="name" name="name" class="form-control" id="categoryName" placeholder="Ex: Web Development" required>
-                </div>
-                <div class="form-group">
-                    <label for="customFile">Image</label>
-                    <div class="custom-file">
-                      <input type="file" name="image" class="custom-file-input" id="customFile" onchange="getName()">
-                      <label class="custom-file-label" for="customFile" id="customName">Choose file</label>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Payments</h3>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                      </button>
                     </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" name="description" rows="3" placeholder="About ..."></textarea>
-                </div>
-                <!-- /.card-body -->
-                <div class="footer" style="float: right;">
-                  <button type="submit" class="btn btn-primary" style="padding: 7px 30px;">Save</button>
-                </div>
-            </form>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 300px;">
+                <table class="table table-head-fixed text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Enquiry ID</th>
+                      <th>Course ID</th>
+                      <th>Payment Type</th>
+                      <th>Payment Paid</th>
+                      <th>Payment Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($payments as $payment)
+                    <tr>
+                        <td>{{$payment->enquiry_id}}</td>
+                        <td>{{$payment->course_id}}</td>
+                        <td>{{$payment->payment_type}}</td>
+                        <td>{{$payment->full_payment + $payment->emi_first_payment + $payment->emi_second_payment}} USD </td>
+                        <td>{{$payment->balance}}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
           </div>
         </div>
         <!-- /.row -->

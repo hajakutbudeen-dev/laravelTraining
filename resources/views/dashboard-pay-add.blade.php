@@ -28,13 +28,6 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('backend/plugins/summernote/summernote-bs4.min.css')}}">
   
-  <script>
-    function getName () {
-      var name = document.getElementById('customFile'); 
-      document.getElementById('customName').innerHTML = name.files.item(0).name;
-    };
-  </script>
-  
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -322,35 +315,112 @@
     </div>
     <!-- /.content-header -->
 
-     <!-- Main content -->
-     <section class="content">
+    <!-- Main content -->
+    <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-        <div class="col-md-6">
-            <form action="{{ url('admin-category-add') }}" method="post" enctype="multipart/form-data">
-              @csrf
+          <div class="col-md-6">
+
               <div class="card-body">
+
+              <form action="{{ url('admin-payment-add') }}" method="post">
+                @csrf
                 <div class="form-group">
-                  <label for="categoryName">Category Name</label>
-                  <input type="name" name="name" class="form-control" id="categoryName" placeholder="Ex: Web Development" required>
-                </div>
-                <div class="form-group">
-                    <label for="customFile">Image</label>
-                    <div class="custom-file">
-                      <input type="file" name="image" class="custom-file-input" id="customFile" onchange="getName()">
-                      <label class="custom-file-label" for="customFile" id="customName">Choose file</label>
+                  <label for="paymentName">Enquiry List</label>
+                    <div style="display:flex">
+                      <select id="enquiryList" class="form-control select2" style="width: 100%;" name="enquiry_no" onchange="getEnquiryInfo('<?php echo csrf_token() ?>')" required>
+                        <option selected="selected" disabled>Select Option</option>
+                        @foreach($enquiries as $enquiry)
+                          <option value="{{$enquiry->id}}">{{$enquiry->name}}</option>
+                        @endforeach
+                      </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" name="description" rows="3" placeholder="About ..."></textarea>
+
+                <div id="enquiryView" style="display:none">
+                  <input id="selectedCourseNo" type="hidden" name="course_no" class="form-control" value="">
+                  <input id="selectedPaymentNo" type="hidden" name="payment_no" class="form-control" value="">
+                  <div class="form-group">
+                        <label for="paymentCoursename">Course Name</label>
+                        <input id="selectedCourseName" type="text" name="course_name" class="form-control" value="" readonly>
+                  </div>
+                  <div class="form-group">
+                        <label for="paymentCourseFee">Course Fee</label>
+                        <input id="selectedCourseFee" type="text"  name="course_fee" class="form-control" value="" readonly>
+                  </div>
+                  <div id="enquiryBalance" class="form-group" style="display:none">
+                        <label for="paymentCourseFeeBalance">Balance</label>
+                        <input id="selectedCourseFeeBalance" type="text"  name="course_fee_balance" class="form-control" value="" readonly>
+                  </div>
+                  <div class="form-group">
+                        <label for="paymentType">Payment Type</label>
+                        <input id="selectedCourseType" type="text" name="payment_type" class="form-control" value="" readonly>
+                  </div>
+                  <div class="form-group">
+                      <label for="paymentInvoice">Invoice Number</label>
+                      <input type="text" name="invoice_no" class="form-control" placeholder="Ex: TB2451" required>
+                  </div>                  
+                  <div class="form-group">
+                      <label for="paymentRef">Reference Number</label>
+                      <input type="text" name="reference_no" class="form-control" placeholder="Ex: ABC23562765712" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="paymentAmount">Amount</label>
+                      <input type="text" name="paid" class="form-control" placeholder="Ex: 250" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="paymentEmail">Method</label>
+                      <select class="form-control select2" style="width: 100%;" name="payment_method" required>
+                          <option selected="selected" disabled>Select Option</option>
+                          <option value='cash'>Cash</option>
+                          <option value='bank_transfer'>Bank Transfer</option>
+                          <option value='gpay'>GPay</option>
+                        </select>
+                  </div>
+                  <div class="footer" style="float: right;">
+                      <button type="submit" class="btn btn-primary" style="padding: 7px 30px;">Submit</button>
+                  </div>
                 </div>
-                <!-- /.card-body -->
-                <div class="footer" style="float: right;">
-                  <button type="submit" class="btn btn-primary" style="padding: 7px 30px;">Save</button>
+
+                <div id="enquiryComplete" style="display:none" class="alert alert-success" role="alert">
+                Your already paid your course fee!
                 </div>
-            </form>
+
+              </form>
+
+              </div>
+
+              <!-- <div class="card-body">
+                <form action="{{ url('admin-payment-add') }}" method="post">
+                  @csrf
+                  <div class="form-group">
+                    <label for="paymentInvoice">Invoice Number</label>
+                    <input type="text" name="invoice_no" class="form-control" id="paymentInvoice" placeholder="Ex: TB2451" required>
+                  </div>                  
+                  <div class="form-group">
+                    <label for="paymentRef">Reference Number</label>
+                    <input type="text" name="reference_no" class="form-control" id="paymentRef" placeholder="Ex: ABC23562765712" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="paymentAmount">Amount</label>
+                    <input type="text" name="amount" class="form-control" id="paymentAmount" placeholder="Ex: 250" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="paymentEmail">Method</label>
+                    <select class="form-control select2" style="width: 100%;" name="type" required>
+                        <option selected="selected" disabled>Select Option</option>
+                        <option value='cash'>Cash</option>
+                        <option value='bank_transfer'>Bank Transfer</option>
+                        <option value='gpay'>GPay</option>
+                      </select>
+                  </div>
+                  <div class="footer" style="float: right;">
+                    <button type="submit" class="btn btn-primary" style="padding: 7px 30px;">Submit</button>
+                  </div>
+                </form>
+              </div> -->
+
           </div>
         </div>
         <!-- /.row -->
@@ -405,5 +475,45 @@
 <script src="{{asset('backend/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('backend/dist/js/pages/dashboard.js')}}"></script>
+<script type="text/javascript">
+    function getEnquiryInfo(token){
+      enquiry_id = document.getElementById("enquiryList").value;
+      $.ajax({
+          type:'post',
+          url:'/admin-payment-enquiry',
+          // headers: {
+          //   '_token': token,
+          // },
+          data: {
+            '_token': token,
+            'id': enquiry_id
+          },
+          success:function(res) {
+            if(res.status == 0){
+              document.getElementById("enquiryView").style.display = 'block';
+              document.getElementById("enquiryComplete").style.display = 'none';
+              document.getElementById("selectedCourseNo").value = res.course.id;
+              document.getElementById("selectedCourseName").value = res.course.title;
+              document.getElementById("selectedCourseFee").value = res.course.price;
+              document.getElementById("selectedCourseType").value = res.payment_type;
+              if(res.payment_type != 'full'){
+                if(res.payment_id != null){
+                  document.getElementById("enquiryBalance").style.display = 'block';
+                  document.getElementById("selectedPaymentNo").value = res.payment.id;
+                  document.getElementById("selectedCourseFeeBalance").value = res.payment.balance + ' USD';
+                } else {
+                  document.getElementById("enquiryBalance").style.display = 'none';
+                }
+              } else {
+                document.getElementById("enquiryBalance").style.display = 'none';
+              }
+            } else {
+              document.getElementById("enquiryView").style.display = 'none';
+              document.getElementById("enquiryComplete").style.display = 'block';
+            }
+          }
+      });
+    }
+  </script>
 </body>
 </html>

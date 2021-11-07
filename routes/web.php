@@ -31,7 +31,6 @@ Route::post('admin-instructor-add', [AdminDashbardController::class,'instructor_
 Route::get('admin-enquiries-view', [AdminDashbardController::class,'enquiries_view']);
 Route::get('admin-enquiry-add', [AdminDashbardController::class,'enquiry_view']);
 Route::post('admin-enquiry-add', [AdminDashbardController::class,'enquiry_add']);
-Route::post('admin-enquiry-update', [AdminDashbardController::class,'enquiry_update']);
 
 Route::get('admin-categories-view', [AdminDashbardController::class,'categories_view']);
 Route::get('admin-category-add', [AdminDashbardController::class,'category_view']);
@@ -44,6 +43,11 @@ Route::post('admin-course-add', [AdminDashbardController::class,'course_add']);
 Route::get('admin-technologies-view', [AdminDashbardController::class,'technologies_view']);
 Route::get('admin-technology-add', [AdminDashbardController::class,'technology_view']);
 Route::post('admin-technology-add', [AdminDashbardController::class,'technology_add']);
+
+Route::get('admin-payments-view', [AdminDashbardController::class,'payments_view']);
+Route::get('admin-payment-add', [AdminDashbardController::class,'payment_view']);
+Route::post('admin-payment-add', [AdminDashbardController::class,'payment_add']);
+Route::post('admin-payment-enquiry', [AdminDashbardController::class,'payment_enquiry']);
 
 Route::get('admin-settings', [AdminDashbardController::class,'settings']);
 

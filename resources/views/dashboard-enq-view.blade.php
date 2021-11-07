@@ -258,6 +258,29 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-money-bill"></i>
+              <p>
+                Payment
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('admin-payments-view') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin-payment-add') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('admin-settings') }}" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>
@@ -327,7 +350,6 @@
                       <th>Email</th>
                       <th>Phone</th>
                       <th>Address</th>
-                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -343,27 +365,6 @@
                         <td>{{$enquiry->email}}</td>
                         <td>{{$enquiry->phone}}</td>
                         <td>{{$enquiry->address}}</td>
-                        <td>
-                          <form action="{{ url('admin-enquiry-update') }}" method="post">
-                            @csrf
-                            <div style="display:-webkit-inline-box;">
-                              <input type="hidden" name="id" value="{{$enquiry->id}}">
-                              <div class="form-group">
-                                  <select class="form-control-sm select2" style="width: 100%;" name="status" required>
-                                    @if($enquiry->status=='1')
-                                    <option value="1" selected>Approved</option>
-                                    <option value="0">Pending</option>
-                                    @else
-                                    <option value="1">Approved</option>
-                                    <option value="0"selected>Pending</option>
-                                    @endif
-                                  </select>
-                              </div>
-                              &nbsp;
-                              <button type="submit" class="btn btn-success btn-sm">Update</button>
-                            </div>
-                          </form>
-                        </td>
                     </tr>
                     <tr>
                       <td></td>

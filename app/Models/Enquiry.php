@@ -30,5 +30,10 @@ class Enquiry extends Model
     {
        return $this->belongsTo('App\Models\Specialization');
     }
+
+    public function payment()
+    {
+       return $this->belongsTo('App\Models\Payment');
+    }
     
 }

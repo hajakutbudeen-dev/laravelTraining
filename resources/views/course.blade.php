@@ -304,6 +304,14 @@
 						</select>
 					</div>
 					<div class="form-group">
+						<label>Payment Type</label>
+						<select class="form-control select2" style="width: 100%;" name="payment" required>
+						<option selected="selected" disabled>Select Option</option>
+						<option value='full'>Full Payment</option>
+						<option value='emi'>EMI Payment (split by 2)</option>
+						</select>
+					</div>
+					<div class="form-group">
 						<label>Address</label>
 						<textarea class="form-control" name="address" rows="3" placeholder="About ..."></textarea>
 					</div>

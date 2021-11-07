@@ -258,6 +258,29 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-money-bill"></i>
+              <p>
+                Payment
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('admin-payments-view') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin-payment-add') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('admin-settings') }}" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>
@@ -363,6 +386,14 @@
                       @foreach($courses as $course)
                         <option value="{{$course->id}}">{{$course->title}}</option>
                       @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label>Payment Type</label>
+                    <select class="form-control select2" style="width: 100%;" name="payment" required>
+                      <option selected="selected" disabled>Select Option</option>
+                      <option value='full'>Full Payment</option>
+                      <option value='emi'>EMI Payment (split by 2)</option>
                     </select>
                 </div>
                 <div class="form-group">
